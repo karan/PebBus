@@ -1,0 +1,17 @@
+{
+  "uuid": "bfb2cf32-f536-4fb7-b349-a19aa67872bc",
+  "shortName": "OneMoreBusAway",
+  "longName": "OneMoreBusAway",
+  "companyName": "Karan Goel",
+  "versionCode": 1,
+  "versionLabel": "1.0",
+  "watchapp": {
+    "watchface": false
+  },
+  "appKeys": {
+    "dummy": 0
+  },
+  "resources": {
+    "media": []
+  }
+}
