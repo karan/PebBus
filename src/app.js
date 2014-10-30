@@ -48,9 +48,13 @@ function fetchStops(coords) {
     for (var i = 0; i < limit_stops; ++i) {
       var dataItem = data[i];
       console.log(dataItem.name);
+      var stop_names = dataItem.name.split(' & ');
+      if (stop_names.length != 2) {
+        stop_names = [dataItem.name.split(0, 12), dataItem.name.split(12)];
+      }
       var item = {
-        title: dataItem.name.substr(0, 10), // TODO: Figure out how to fit everything
-        subtitle: dataItem.id,
+        title: stop_names[0],
+        subtitle: stop_names[1],
         stop: {
           id: dataItem.id,
           dir: dataItem.direction,
@@ -78,8 +82,6 @@ function fetchStops(coords) {
              'departures-for-stop/' + stop_id + '.json?key=TEST',
         type: 'json'
       }, function(d) {
-        console.log(JSON.stringify(d));
-
         var data;
         if (d.data.entry) {
           data = d.data.entry.arrivalsAndDepartures;
@@ -90,10 +92,16 @@ function fetchStops(coords) {
         for (var i = 0; i < data.length; ++i) {
           var dataItem = data[i];
           console.log(dataItem.routeShortName);
-            var item = {
-              title: dataItem.routeShortName + dataItem.tripHeadsign,
-              subtitle: dataItem.predictedArrivalTime
-            };
+          var predictTime;
+          if (dataItem.predictedArrivalTime === 0) {
+            predictTime = (new Date()).getTime();
+          } else {
+            predictTime = dataItem.predictedArrivalTime;
+          }
+          var item = {
+            title: dataItem.routeShortName + ' ' + e.item.stop.dir,
+            subtitle: Math.ceil((predictTime - d.currentTime) / (60 * 1000)) + ' mins'
+          };
           busTimes.push(item);
         }
         
