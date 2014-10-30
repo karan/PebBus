@@ -12,13 +12,12 @@ var main_window = new UI.Window();
 var info_text = new UI.Text({
   position: new Vector2(0, 50),
   size: new Vector2(144, 30),
-  text: 'OneMoreBusAway',
+  text: 'Finding nearby stops..',
   textAlign: 'center'
 });
 
 
 function locationSuccess(pos) {
-  console.log('in locationsuccess');
   console.log(JSON.stringify(pos.coords));
   fetchStops(pos.coords);
 }
@@ -38,38 +37,44 @@ function fetchStops(coords) {
   }, function(dataObj) {
     var data = dataObj.data.list;
   
-    var menuSections = [];
-    var limit_stops = Math.min(data.length, 5);
+    var stops = [];
+    var limit_stops = Math.min(data.length, 7);
     for (var i = 0; i < limit_stops; ++i) {
       var dataItem = data[i];
       console.log(dataItem.name);
-      var section = {
-        items: [{
-          title: dataItem.name,
-          stop_id: dataItem.id
-        }]
+      var item = {
+        title: dataItem.name.substr(0, 10), // TODO: Figure out how to fit everything
+        subtitle: dataItem.id,
+        stop: {
+          id: dataItem.id,
+          dir: dataItem.direction,
+          code: dataItem.code
+        }
       };
-      menuSections.push(section);
+      stops.push(item);
     }
     
     var stopMenu = new UI.Menu({
       sections: [{
         title: 'Nearby stops',
-        items: menuSections
+        items: stops
       }]
     });
     stopMenu.show();
 
     stopMenu.on('select', function(e) {
-      var stop_id = e.item.stop_id;
+      var stop_id = e.item.stop.id;
       var busTimesSections = [];
+      
+      info_text.text('Getting bus times');
 
       ajax({
         url: 'http://api.pugetsound.onebusaway.org/api/where/arrivals-and-' +
              'departures-for-stop/' + stop_id + '.json?key=TEST',
         type: 'json'
       }, function(d) {
-        var data = d.data.arrivalsAndDepartures;
+        console.log(JSON.stringify(d));
+        var data = d.entry.arrivalsAndDepartures;
         for (var i = 0; i < data.length; ++i) {
           var dataItem = data[i];
           console.log(dataItem.routeShortName);
