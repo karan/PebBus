@@ -35,10 +35,16 @@ function fetchStops(coords) {
          'json?key=TEST&lat=' + coords.latitude + '&lon=' + coords.longitude,
     type: 'json'
   }, function(dataObj) {
-    var data = dataObj.data.list;
+    console.log(JSON.stringify(dataObj));
+    var data;
+    if (dataObj.data.stops) {
+      data = dataObj.data.stops;
+    } else {
+      data = dataObj.data.list;
+    }
   
     var stops = [];
-    var limit_stops = Math.min(data.length, 7);
+    var limit_stops = Math.min(data.length, 5);
     for (var i = 0; i < limit_stops; ++i) {
       var dataItem = data[i];
       console.log(dataItem.name);
@@ -60,11 +66,10 @@ function fetchStops(coords) {
         items: stops
       }]
     });
-    stopMenu.show();
 
     stopMenu.on('select', function(e) {
       var stop_id = e.item.stop.id;
-      var busTimesSections = [];
+      var busTimes = [];
       
       info_text.text('Getting bus times');
 
@@ -74,25 +79,31 @@ function fetchStops(coords) {
         type: 'json'
       }, function(d) {
         console.log(JSON.stringify(d));
-        var data = d.entry.arrivalsAndDepartures;
+
+        var data;
+        if (d.data.entry) {
+          data = d.data.entry.arrivalsAndDepartures;
+        } else {
+          data = d.data.arrivalsAndDepartures;
+        }
+
         for (var i = 0; i < data.length; ++i) {
           var dataItem = data[i];
           console.log(dataItem.routeShortName);
-          var section = {
-            items: [{
+            var item = {
               title: dataItem.routeShortName + dataItem.tripHeadsign,
               subtitle: dataItem.predictedArrivalTime
-            }]
-          };
-          busTimesSections.push(section);
+            };
+          busTimes.push(item);
         }
         
         var busMenu = new UI.Menu({
           sections: [{
             title: 'Upcoming Buses',
-            items: busTimesSections
+            items: busTimes
           }]
         });
+        
         busMenu.show();
       }, function(error) {
         if (error.message) {
@@ -102,6 +113,8 @@ function fetchStops(coords) {
         }
       });
     });
+    
+    stopMenu.show();
   }, function(error) {
     if (error.message) {
       info_text.text(error.message);
