@@ -13,8 +13,6 @@ var info_text = new UI.Text({
   position: new Vector2(0, 30),
   size: new Vector2(144, 40),
   text:'Fetching nearby stops...',
-  font:'GOTHIC_28_BOLD',
-  color:'black',
   textOverflow:'wrap',
   textAlign:'center'
 });
@@ -58,7 +56,7 @@ function fetchStops(coords) {
         stop_names = [dataItem.name.split(0, 12), dataItem.name.split(12)];
       }
       var item = {
-        title: stop_names[0],
+        title: ' (' + dataItem.direction + ')' + stop_names[0],
         subtitle: stop_names[1],
         stop: {
           id: dataItem.id,
@@ -71,7 +69,6 @@ function fetchStops(coords) {
     
     var stopMenu = new UI.Menu({
       sections: [{
-        title: 'Nearby stops',
         items: stops
       }]
     });
@@ -105,7 +102,7 @@ function fetchStops(coords) {
             predictTime = dataItem.predictedArrivalTime;
           }
           var item = {
-            title: dataItem.routeShortName + ' ' + e.item.stop.dir,
+            title: dataItem.routeShortName,
             subtitle: Math.ceil((predictTime - d.currentTime) / (60 * 1000)) + ' mins'
           };
           busTimes.push(item);
@@ -113,7 +110,6 @@ function fetchStops(coords) {
         
         var busMenu = new UI.Menu({
           sections: [{
-            title: 'Upcoming Buses',
             items: busTimes
           }]
         });
