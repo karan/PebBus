@@ -1,19 +1,24 @@
-// libs
 var UI = require('ui');
 var Vector2 = require('vector2'); 
 var ajax = require('ajax');
 
-// variables
+
 var locationOptions = {'timeout': 15000, 'maximumAge': 30000,
                        'enableHighAccuracy': true};
 
 
-var main_window = new UI.Window();
+var main_window = new UI.Window({
+  backgroundColor: 'white'
+});
+
 var info_text = new UI.Text({
-  position: new Vector2(0, 50),
-  size: new Vector2(144, 30),
-  text: 'Finding nearby stops..',
-  textAlign: 'center'
+  position: new Vector2(0, 30),
+  size: new Vector2(144, 40),
+  text:'Fetching nearby stops...',
+  font:'GOTHIC_28_BOLD',
+  color:'black',
+  textOverflow:'wrap',
+  textAlign:'center'
 });
 
 
@@ -36,6 +41,7 @@ function fetchStops(coords) {
     type: 'json'
   }, function(dataObj) {
     console.log(JSON.stringify(dataObj));
+    
     var data;
     if (dataObj.data.stops) {
       data = dataObj.data.stops;
@@ -45,6 +51,7 @@ function fetchStops(coords) {
   
     var stops = [];
     var limit_stops = Math.min(data.length, 5);
+    
     for (var i = 0; i < limit_stops; ++i) {
       var dataItem = data[i];
       console.log(dataItem.name);
@@ -70,12 +77,13 @@ function fetchStops(coords) {
         items: stops
       }]
     });
+    
+    stopMenu.show();
+    main_window.hide();
 
     stopMenu.on('select', function(e) {
       var stop_id = e.item.stop.id;
       var busTimes = [];
-      
-      info_text.text('Getting bus times');
 
       ajax({
         url: 'http://api.pugetsound.onebusaway.org/api/where/arrivals-and-' +
@@ -121,8 +129,6 @@ function fetchStops(coords) {
         }
       });
     });
-    
-    stopMenu.show();
   }, function(error) {
     if (error.message) {
       info_text.text(error.message);
@@ -134,7 +140,6 @@ function fetchStops(coords) {
 
 
 function init() {
-  console.log('Initing');
   window.navigator.geolocation.getCurrentPosition(locationSuccess,
                                                   locationError,
                                                   locationOptions);
