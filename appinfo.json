@@ -4,7 +4,7 @@
         "location"
     ],
     "companyName": "Karan Goel",
-    "longName": "OneMoreBusAway",
+    "longName": "PebBus",
     "projectType": "pebblejs",
     "resources": {
         "media": [
@@ -29,14 +29,14 @@
                 "type": "font"
             },
             {
-                "file": "images/rsz_bus-512.png",
+                "file": "images/menu_icon.png",
                 "menuIcon": true,
-                "name": "IMAGES_RSZ_BUS_512_PNG",
+                "name": "IMAGES_MENU_ICON_PNG",
                 "type": "png"
             }
         ]
     },
-    "shortName": "OneMoreBusAway",
+    "shortName": "PebBus",
     "uuid": "0b0f0775-9b04-4b5a-9838-514411801d38",
     "versionCode": 1,
     "versionLabel": "0.1",

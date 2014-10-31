@@ -7,9 +7,7 @@ var locationOptions = {'timeout': 15000, 'maximumAge': 30000,
                        'enableHighAccuracy': true};
 
 
-var main_window = new UI.Window({
-  backgroundColor: 'white'
-});
+var main_window = new UI.Window();
 
 var info_text = new UI.Text({
   position: new Vector2(0, 30),
