@@ -56,7 +56,7 @@ function fetchStops(coords) {
         stop_names = [dataItem.name.split(0, 12), dataItem.name.split(12)];
       }
       var item = {
-        title: ' (' + dataItem.direction + ')' + stop_names[0],
+        title: '(' + dataItem.direction + ') ' + stop_names[0],
         subtitle: stop_names[1],
         stop: {
           id: dataItem.id,
