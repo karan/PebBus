@@ -20,7 +20,7 @@ Download
 
 [![](http://chart.apis.google.com/chart?chs=200x200&cht=qr&chld=|1&chl=https://apps.getpebble.com/applications/54531ad3133890ddd1000053)](https://apps.getpebble.com/applications/54531ad3133890ddd1000053)
 
-**Latest PWB** [Download](LINK-HERE)
+**Latest PWB** [Download](https://github.com/karan/PebBus/releases/download/v0.1/PebBus-v0.1.pbw)
 
 License
 -------
